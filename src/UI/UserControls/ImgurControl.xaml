@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="UI.UserControls.ImgurControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UI"
+             xmlns:converters="clr-namespace:UI.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Background="LightGray">
+            <Grid Margin="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Album URL:" VerticalAlignment="Center" ToolTip="Also supports specifying a username whose images to download, instead of an album." ToolTipService.InitialShowDelay="800"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="2" Grid.ColumnSpan="2" Text="{Binding Source, Mode=TwoWay}"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Target folder: " VerticalAlignment="Center" Margin="0,0,0,12"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="2,2,2,10" Text="{Binding TargetFolder, Mode=TwoWay}" VerticalAlignment="Center"/>
+                <Button Grid.Column="2" Grid.Row="1" Margin="2,2,2,10" Content="Select" Command="{Binding SelectFolder}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Min width: " VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Max width: " VerticalAlignment="Center"/>
+
+                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Grid.Column="0" Margin="2" Text="{Binding WidthMin, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Min height:" VerticalAlignment="Center" Margin="10,2,2,2"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Margin="2" Text="{Binding HeightMin, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
+
+                    <TextBox Grid.Row="1" Grid.Column="0" Margin="2" Text="{Binding WidthMax, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="Max height:" VerticalAlignment="Center" Margin="10,2,2,2"/>
+                    <TextBox Grid.Row="1" Grid.Column="2" Margin="2" Text="{Binding HeightMax, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
+                </Grid>
+
+                <ProgressBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Bottom" Margin="2" Minimum="0" Maximum="{Binding ProgressMaxValue}" Value="{Binding Log.Count, Mode=OneWay}"/>
+                <Button Grid.Row="4" Grid.Column="2" Command="{Binding Download}" Content="Download" Margin="2,10,2,2" Height="20" VerticalAlignment="Top" IsEnabled="{Binding IsIdle, Mode=OneWay}"/>
+                <Rectangle x:Name="Separator" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Stroke="#FF000000" Height="1" StrokeThickness="1" StrokeDashArray="2 4" Margin="3"/>
+                <TextBox x:Name="Log" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Margin="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap">
+                    <TextBox.Text>
+                        <MultiBinding Converter="{x:Static converters:Converters.LogConverter}">
+                            <Binding Path="Log" Mode="OneWay"/>
+                            <Binding Path="Log.Count" Mode="OneWay"/>
+                            <!--Subscribing to .Count to make it update when the content changes, and not just when the collection itself changes-->
+                        </MultiBinding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,27 @@
+﻿<Window x:Class="UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        xmlns:userControls="clr-namespace:UI.UserControls"
+        mc:Ignorable="d"
+        Title="ImageDownloader" Height="390" Width="370"
+        MinHeight="220" MinWidth="370">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Reddit">
+                <userControls:RedditControl/>
+            </TabItem>
+            <TabItem Header="Imgur">
+                <userControls:ImgurControl/>
+            </TabItem>
+            <TabItem Header="Local">
+                <userControls:LocalControl/>
+            </TabItem>
+            <TabItem Header="Settings" Selector.Selected="SettingsTab_OnSelected">
+                <userControls:SettingsControl/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

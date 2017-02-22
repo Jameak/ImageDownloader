@@ -1,0 +1,45 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DataAccess.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ImgurClientID" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SupportedExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;.jpg&lt;/string&gt;
+  &lt;string&gt;.jpeg&lt;/string&gt;
+  &lt;string&gt;.gif&lt;/string&gt;
+  &lt;string&gt;.png&lt;/string&gt;
+  &lt;string&gt;.bmp&lt;/string&gt;
+  &lt;string&gt;.gif&lt;/string&gt;
+  &lt;string&gt;.tif&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="FallbackDimensionWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="FallbackDimensionHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="RedditUserAgent" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PC:ImageDownloader:v1.0.0 (by /u/Jameak)</Value>
+    </Setting>
+    <Setting Name="DeviantartUserAgent" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PC:ImageDownloader:v1.0.0 (github.com/jameak/ImageDownloader)</Value>
+    </Setting>
+    <Setting Name="RedditAppId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">J687G-r-0ZTQsg</Value>
+    </Setting>
+    <Setting Name="DeviceId" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ImgurClientIDDefault" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">0fed969f9f62557</Value>
+    </Setting>
+    <Setting Name="VersionNumber" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">v1.0.0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
