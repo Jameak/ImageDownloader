@@ -8,7 +8,6 @@ ImageDownloader supports downloading and filtering images originating from Reddi
 The following image sources are supported:
 * Imgur albums and account profiles.
 * Reddit posts can be sourced from any subreddit, with additional filtering options. Posts linking to i.redd.it, DeviantArt, or Imgur images are explicitly supported, as well as Imgur albums. An attempt is made at downloading any other image linked to, if the url ends in one of the whitelisted image extensions.
-* Reddit posts can be sourced from any subreddit, and supports additional filtering such as sorting by top or new. Posts linking to i.redd.it, DeviantArt or Imgur are explicitly supported. Links to Imgur albums are also supported, and can be skipped if desired. An attempt is made at downloading any other image linked to, if the url ends in one of the whitelisted image extensions.
 * Files in local directories can also be filtered. Images that adhere to the resolution requirements are copied into the destination folder, without modifying the original files.
 
 When posts are grabbed from Reddit, the following additional options are supported:
