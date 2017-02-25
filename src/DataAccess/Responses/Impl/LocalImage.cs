@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Helpers;
 
 namespace DataAccess.Responses.Impl
 {
@@ -78,6 +79,11 @@ namespace DataAccess.Responses.Impl
                 //Thrown if the stream does not have a valid image format
                 return false;
             }
+        }
+
+        public async Task<Tuple<int, int>> GetAspectRatio()
+        {
+            return ImageHelper.GetAspectRatio(await GetWidth(), await GetHeight());
         }
 
         public void Dispose()

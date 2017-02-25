@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:UI"
              xmlns:converters="clr-namespace:UI.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500">
+             d:DesignHeight="350" d:DesignWidth="500">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Background="LightGray">
             <Grid Margin="7">
@@ -23,6 +23,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Subreddit: /r/" VerticalAlignment="Center"/>
@@ -32,14 +33,16 @@
                 <Button Grid.Column="2" Grid.Row="1" Margin="2,2,2,10" Content="Select" Command="{Binding SelectFolder}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Min width: " VerticalAlignment="Center"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Max width: " VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Aspect ratio: " VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -50,8 +53,9 @@
                     <TextBox Grid.Row="1" Grid.Column="0" Margin="2" Text="{Binding WidthMax, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Max height:" VerticalAlignment="Center" Margin="10,2,2,2"/>
                     <TextBox Grid.Row="1" Grid.Column="2" Margin="2" Text="{Binding HeightMax, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
+                    <TextBox Grid.Row="2" Grid.Column="0" Margin="2" Text="{Binding AspectRatio, Mode=TwoWay}" PreviewTextInput="AspectRatioInputValidation" DataObject.Pasting="AspectRatioInputValidationOnPaste"/>
                 </Grid>
-                <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="2,10,2,2">
+                <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="2,10,2,2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="1*" />
@@ -97,11 +101,11 @@
                     </Grid>
                 </Grid>
 
-                <ProgressBar Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Bottom" Margin="2" Minimum="0"  Maximum="{Binding ProgressMaxValue}" Value="{Binding Log.Count, Mode=OneWay}"/>
-                <Button Grid.Row="5" Grid.Column="2" Command="{Binding Download}" Content="Download" Margin="2,10,2,2" Height="20" VerticalAlignment="Top" IsEnabled="{Binding IsIdle, Mode=OneWay}"/>
-                <Rectangle x:Name="Separator" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Stroke="#FF000000" Height="1" StrokeThickness="1" StrokeDashArray="2 4" Margin="3"/>
+                <ProgressBar Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Bottom" Margin="2" Minimum="0"  Maximum="{Binding ProgressMaxValue}" Value="{Binding Log.Count, Mode=OneWay}"/>
+                <Button Grid.Row="6" Grid.Column="2" Command="{Binding Download}" Content="Download" Margin="2,10,2,2" Height="20" VerticalAlignment="Top" IsEnabled="{Binding IsIdle, Mode=OneWay}"/>
+                <Rectangle x:Name="Separator" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Stroke="#FF000000" Height="1" StrokeThickness="1" StrokeDashArray="2 4" Margin="3"/>
 
-                <TextBox x:Name="Log" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Margin="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap">
+                <TextBox x:Name="Log" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Margin="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap">
                     <TextBox.Text>
                         <MultiBinding Converter="{x:Static converters:Converters.LogConverter}">
                             <Binding Path="Log" Mode="OneWay"/>

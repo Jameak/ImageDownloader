@@ -42,5 +42,30 @@ namespace DataAccess.Helpers
                 throw new WebException("Connection lost", e);
             }
         }
+
+        /// <summary>
+        /// Non-recursive GCD
+        /// </summary>
+        public static int GCD(int a, int b)
+        {
+            while (true)
+            {
+                if (b == 0) return a;
+                var a1 = a;
+                a = b;
+                b = a1 % b;
+            }
+        }
+
+        /// <summary>
+        /// Reduces the given ratio to their lowest rational representation.
+        /// </summary>
+        public static Tuple<int, int> GetAspectRatio(int width, int height)
+        {
+            var den = GCD(width, height);
+            var item1 = width / den;
+            var item2 = height / den;
+            return new Tuple<int, int>(item1, item2);
+        }
     }
 }

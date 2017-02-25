@@ -76,7 +76,7 @@ namespace Logic.Handlers
 
                         try
                         {
-                            if (filter(await image.GetHeight(), await image.GetWidth()))
+                            if (filter(await image.GetHeight(), await image.GetWidth(), await image.GetAspectRatio()))
                             {
                                 var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
                                 var fileContents = await image.GetImage();
@@ -135,6 +135,6 @@ namespace Logic.Handlers
             Album, AccountImages
         }
 
-        public delegate bool ImgurFilter(int imageHeight, int imageWidth);
+        public delegate bool ImgurFilter(int imageHeight, int imageWidth, Tuple<int, int> aspectRatio);
     }
 }

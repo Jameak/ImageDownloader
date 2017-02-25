@@ -84,6 +84,11 @@ namespace DataAccess.Responses.Impl
             }
         }
 
+        public async Task<Tuple<int, int>> GetAspectRatio()
+        {
+            return ImageHelper.GetAspectRatio(await GetWidth(), await GetHeight());
+        }
+
         public void Dispose()
         {
             Image?.Dispose();

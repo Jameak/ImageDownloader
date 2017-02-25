@@ -48,7 +48,7 @@ namespace Logic.Handlers
 
                         try
                         {
-                            if (filter(await image.GetHeight(), await image.GetWidth()))
+                            if (filter(await image.GetHeight(), await image.GetWidth(), await image.GetAspectRatio()))
                             {
                                 var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
 
@@ -84,6 +84,6 @@ namespace Logic.Handlers
             });
         }
 
-        public delegate bool LocalFilter(int imageHeight, int imageWidth);
+        public delegate bool LocalFilter(int imageHeight, int imageWidth, Tuple<int, int> aspectRatio);
     }
 }

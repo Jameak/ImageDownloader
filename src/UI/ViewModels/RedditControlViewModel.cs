@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using DataAccess.Responses.Impl;
 using Logic;
@@ -50,6 +51,12 @@ namespace UI.ViewModels
 
         public async void StartDownload()
         {
+            if (!TryParseAspectRatio())
+            {
+                MessageBox.Show("The given aspect ratio is not valid.", "ImageDownloader");
+                return;
+            }
+
             IsIdle = false;
             RedditListing content;
             Log = new ThreadsafeObservableStringCollection();
@@ -91,12 +98,12 @@ namespace UI.ViewModels
         /// Provides a filter for deciding whether an image should be included or excluded.
         /// <see cref="RedditHandler.RedditFilter"/>
         /// </summary>
-        private bool Filter(int height, int width, bool isNSFW, bool isAlbum)
+        private bool Filter(int height, int width, bool isNSFW, bool isAlbum, Tuple<int, int> aspectRatio)
         {
             if (!IncludeNSFW && isNSFW) return false;
             if (SkipAlbums && isAlbum) return false;
 
-            return ResolutionFilter(height, width);
+            return ResolutionFilter(height, width, aspectRatio);
         }
     }
 }

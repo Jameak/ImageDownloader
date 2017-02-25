@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -58,6 +59,11 @@ namespace DataAccess.Responses.Impl
             }
 
             return Title != null ? $"{Title}{await GetImageType()}" : name;
+        }
+
+        public async Task<Tuple<int, int>> GetAspectRatio()
+        {
+            return ImageHelper.GetAspectRatio(await GetWidth(), await GetHeight());
         }
 
         public void Dispose() { }

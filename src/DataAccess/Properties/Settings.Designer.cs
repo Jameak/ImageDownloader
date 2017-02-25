@@ -82,7 +82,7 @@ namespace DataAccess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.0.0 (by /u/Jameak)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.1.0 (by /u/Jameak)")]
         public string RedditUserAgent {
             get {
                 return ((string)(this["RedditUserAgent"]));
@@ -91,7 +91,7 @@ namespace DataAccess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.0.0 (github.com/jameak/ImageDownloader)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.1.0 (github.com/jameak/ImageDownloader)")]
         public string DeviantartUserAgent {
             get {
                 return ((string)(this["DeviantartUserAgent"]));
@@ -130,7 +130,7 @@ namespace DataAccess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("v1.0.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("v1.1.0")]
         public string VersionNumber {
             get {
                 return ((string)(this["VersionNumber"]));

@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using DataAccess.Responses;
 using Logic;
@@ -28,6 +30,12 @@ namespace UI.ViewModels
 
         public async void StartDownload()
         {
+            if (!TryParseAspectRatio())
+            {
+                MessageBox.Show("The given aspect ratio is not valid.", "ImageDownloader");
+                return;
+            }
+            
             IsIdle = false;
 
             //Remove trailing slash

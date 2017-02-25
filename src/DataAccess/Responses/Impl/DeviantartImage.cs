@@ -50,5 +50,10 @@ namespace DataAccess.Responses.Impl
         {
             return $"{Title}{await GetImageType()}";
         }
+
+        public async Task<Tuple<int, int>> GetAspectRatio()
+        {
+            return ImageHelper.GetAspectRatio(await GetWidth(), await GetHeight());
+        }
     }
 }

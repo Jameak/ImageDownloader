@@ -1,5 +1,10 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using DataAccess.Helpers;
 
 namespace UI.ViewModels.Base
 {
@@ -17,6 +22,10 @@ namespace UI.ViewModels.Base
         protected bool _isIdle = true;
         protected ThreadsafeObservableStringCollection _log = new ThreadsafeObservableStringCollection();
         protected int _progressMaxValue = 1;
+        protected string _aspectRatio;
+
+        protected int? _parsedAspectVal1;
+        protected int? _parsedAspectVal2;
 
         #region XAML binding properties
         public string Source { get { return _source; } set { if (_source != value) { _source = value; OnPropertyChanged(); Download?.OnCanExecuteChanged(this); } } }
@@ -37,6 +46,8 @@ namespace UI.ViewModels.Base
 
         public int ProgressMaxValue { get { return _progressMaxValue; } set { if (_progressMaxValue != value) { _progressMaxValue = value; OnPropertyChanged(); } } }
 
+        public string AspectRatio { get { return _aspectRatio; } set { if (_aspectRatio != value) { _aspectRatio = value; OnPropertyChanged(); } } }
+
         public ICommand SelectFolder { get; set; }
         public RelayCommand Download { get; set; }
         #endregion
@@ -46,12 +57,13 @@ namespace UI.ViewModels.Base
         /// and width satisfies the specified restrictions.
         /// </summary>
         /// <returns>Returns true if the restrictions are satisfied</returns>
-        protected virtual bool ResolutionFilter(int height, int width)
+        protected virtual bool ResolutionFilter(int height, int width, Tuple<int,int> aspectRatio)
         {
             var validHeightMax = true;
             var validHeightMin = true;
             var validWidthMax = true;
             var validWidthMin = true;
+            var validAspectRatio = true;
 
             if (HeightMax != null && height > HeightMax.Value)
             {
@@ -73,7 +85,36 @@ namespace UI.ViewModels.Base
                 validWidthMin = false;
             }
 
-            return validHeightMax && validHeightMin && validWidthMin && validWidthMax;
+            if (_parsedAspectVal1 != null && _parsedAspectVal2 != null)
+            {
+                validAspectRatio = _parsedAspectVal1.Value == aspectRatio.Item1 && _parsedAspectVal2.Value == aspectRatio.Item2;
+            }
+
+            return validHeightMax && validHeightMin && validWidthMin && validWidthMax && validAspectRatio;
+        }
+
+        protected virtual bool TryParseAspectRatio()
+        {
+            _parsedAspectVal1 = null;
+            _parsedAspectVal2 = null;
+
+            if (!string.IsNullOrWhiteSpace(AspectRatio))
+            {
+                var regex = new Regex("^[0-9]{1,9}:[0-9]{1,9}$");
+                if (!regex.IsMatch(AspectRatio))
+                {
+                    return false;
+                }
+
+                var vals = AspectRatio.Split(':');
+                //Reduce the users aspect ratio so we can accurately compare them to the image aspects. e.g. 32:18 will be reduced to 16:9
+                var reducedRatio = ImageHelper.GetAspectRatio(int.Parse(vals[0]), int.Parse(vals[1]));
+
+                _parsedAspectVal1 = reducedRatio.Item1;
+                _parsedAspectVal2 = reducedRatio.Item2;
+            }
+
+            return true;
         }
     }
 }

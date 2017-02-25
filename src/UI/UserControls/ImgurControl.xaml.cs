@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -58,6 +59,22 @@ namespace UI.UserControls
         private void InputValidationOnPaste(object sender, DataObjectPastingEventArgs e)
         {
             SharedEventHandlingLogic.InputValidationOnPaste_ConstrainToInt(sender, e);
+        }
+
+        /// <summary>
+        /// See <see cref="SharedEventHandlingLogic.InputValidation_ConstrainToAspectRatio(object,TextCompositionEventArgs)"/>
+        /// </summary>
+        private void AspectRatioInputValidation(object sender, TextCompositionEventArgs e)
+        {
+            SharedEventHandlingLogic.InputValidation_ConstrainToAspectRatio(sender, e);
+        }
+
+        /// <summary>
+        /// See <see cref="SharedEventHandlingLogic.InputValidationOnPaste_ConstrainToAspectRatio(object,DataObjectPastingEventArgs)"/>
+        /// </summary>
+        private void AspectRatioInputValidationOnPaste(object sender, DataObjectPastingEventArgs e)
+        {
+            SharedEventHandlingLogic.InputValidationOnPaste_ConstrainToAspectRatio(sender, e);
         }
     }
 }

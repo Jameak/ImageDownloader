@@ -65,7 +65,7 @@ namespace Logic.Handlers
 
                             try
                             {
-                                if (filter(await image.GetHeight(), await image.GetWidth(), redditPost.Over_18, redditPost.Album != null))
+                                if (filter(await image.GetHeight(), await image.GetWidth(), redditPost.Over_18, redditPost.Album != null, await image.GetAspectRatio()))
                                 {
                                     var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
                                     var fileContents = await image.GetImage();
@@ -111,6 +111,6 @@ namespace Logic.Handlers
             });
         }
 
-        public delegate bool RedditFilter(int imageHeight, int imageWidth, bool isNSFW, bool isAlbum);
+        public delegate bool RedditFilter(int imageHeight, int imageWidth, bool isNSFW, bool isAlbum, Tuple<int, int> aspectRatio);
     }
 }

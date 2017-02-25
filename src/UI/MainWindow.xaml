@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UI"
         xmlns:userControls="clr-namespace:UI.UserControls"
         mc:Ignorable="d"
-        Title="ImageDownloader" Height="390" Width="370"
+        Title="ImageDownloader" Height="410" Width="370"
         MinHeight="220" MinWidth="370">
     <Grid>
         <TabControl>

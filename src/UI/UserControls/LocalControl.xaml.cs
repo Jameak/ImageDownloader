@@ -79,5 +79,21 @@ namespace UI.UserControls
         {
             SharedEventHandlingLogic.InputValidationOnPaste_ConstrainToInt(sender, e);
         }
+
+        /// <summary>
+        /// See <see cref="SharedEventHandlingLogic.InputValidation_ConstrainToAspectRatio(object,TextCompositionEventArgs)"/>
+        /// </summary>
+        private void AspectRatioInputValidation(object sender, TextCompositionEventArgs e)
+        {
+            SharedEventHandlingLogic.InputValidation_ConstrainToAspectRatio(sender, e);
+        }
+
+        /// <summary>
+        /// See <see cref="SharedEventHandlingLogic.InputValidationOnPaste_ConstrainToAspectRatio(object,DataObjectPastingEventArgs)"/>
+        /// </summary>
+        private void AspectRatioInputValidationOnPaste(object sender, DataObjectPastingEventArgs e)
+        {
+            SharedEventHandlingLogic.InputValidationOnPaste_ConstrainToAspectRatio(sender, e);
+        }
     }
 }

@@ -37,6 +37,10 @@ namespace DataAccess.Responses
         /// </summary>
         Task<string> GetImageName();
 
-        
+        /// <summary>
+        /// Gets the aspect ratio of the image, reduced to their lowest rational ratio.
+        /// E.g. 1920 by 1080 must be returned as 16 by 9
+        /// </summary>
+        Task<Tuple<int, int>> GetAspectRatio();
     }
 }
