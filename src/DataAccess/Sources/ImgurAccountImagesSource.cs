@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DataAccess.Helpers;
 using DataAccess.Responses;
 using DataAccess.Responses.Impl;
+using Newtonsoft.Json;
 
 namespace DataAccess.Sources
 {
@@ -56,7 +57,8 @@ namespace DataAccess.Sources
                 }
 
                 //The number of images that the user has.
-                var numImages = (await imageNumberResult.Content.ReadAsAsync<ApiHelper<int>>()).Data;
+                var numVal = await imageNumberResult.Content.ReadAsStringAsync();
+                var numImages = JsonConvert.DeserializeObject<ApiHelper<int>>(numVal).Data;
                 
                 //Each page contains 50 images, so page through them if we need to.
                 for (var page = 0; page < Math.Ceiling(numImages / 50.0); page++)
@@ -68,9 +70,10 @@ namespace DataAccess.Sources
 
                         if (result.IsSuccessStatusCode)
                         {
-                            var val = await result.Content.ReadAsAsync<ApiHelper<ICollection<ImgurImage>>>();
+                            var val = await result.Content.ReadAsStringAsync();
+                            var valParsed = JsonConvert.DeserializeObject<ApiHelper<ICollection<ImgurImage>>>(val);
 
-                            foreach (var image in val.Data)
+                            foreach (var image in valParsed.Data)
                             {
                                 var ext = await image.GetImageType();
                                 if (Settings.GetSupportedExtensions().Contains(ext.ToLower()))

@@ -16,7 +16,6 @@ using DataAccess.Responses.Impl;
 using DataAccess.Sources;
 using Logic;
 using Logic.Handlers;
-using Microsoft.Extensions.DependencyInjection;
 using UI.ViewModels;
 
 namespace UI
@@ -33,7 +32,7 @@ namespace UI
 
         private void RegisterServices()
         {
-            var services = new ServiceCollection();
+            var services = new InversionContainer();
 
             //Specialized HttpClients
             var clientImgur = new HttpClient();
@@ -64,21 +63,21 @@ namespace UI
 
             //Handlers
             services.AddTransient<IHandler<ImgurHandler.ImgurFilter, IApiCollection<IApiImage>>>(o => new ImgurHandler(o.GetService<ISource<ImgurAlbum>>(), o.GetService<ISource<GenericAlbum>>()));
-            services.AddTransient<IHandler<RedditHandler.RedditFilter, RedditListing>, RedditHandler>();
-            services.AddTransient<IHandler<LocalHandler.LocalFilter, LocalDirectory>, LocalHandler>();
+            services.AddTransient<IHandler<RedditHandler.RedditFilter, RedditListing>>(o => new RedditHandler(o.GetService<ICollectionSource<RedditListing>>()));
+            services.AddTransient<IHandler<LocalHandler.LocalFilter, LocalDirectory>>(o => new LocalHandler(o.GetService<ISource<LocalDirectory>>()));
 
             services.AddTransient<ITokenAcquirer<RedditToken>, RedditAcquirer>();
 
-            services.AddSingleton<ImgurRatelimiter>();
-            services.AddTransient<Ratelimiter>();
+            services.AddSingleton<ImgurRatelimiter>(new ImgurRatelimiter(services.GetService<ISource<ImgurRatelimitResponse>>()));
+            services.AddTransient<Ratelimiter>(o => new Ratelimiter(o.GetService<ImgurRatelimiter>()));
 
             //Viewmodels
-            services.AddTransient<ImgurControlViewModel>();
-            services.AddTransient<RedditControlViewModel>();
-            services.AddTransient<LocalControlViewModel>();
-            services.AddTransient<SettingsControlViewModel>();
+            services.AddTransient<ImgurControlViewModel>(o => new ImgurControlViewModel(o.GetService<IHandler<ImgurHandler.ImgurFilter, IApiCollection<IApiImage>>>()));
+            services.AddTransient<RedditControlViewModel>(o => new RedditControlViewModel(o.GetService<IHandler<RedditHandler.RedditFilter, RedditListing>>()));
+            services.AddTransient<LocalControlViewModel>(o => new LocalControlViewModel(o.GetService<IHandler<LocalHandler.LocalFilter, LocalDirectory>>()));
+            services.AddTransient<SettingsControlViewModel>(o => new SettingsControlViewModel(o.GetService<Ratelimiter>()));
 
-            Container = services.BuildServiceProvider();
+            Container = services;
         }
     }
 }

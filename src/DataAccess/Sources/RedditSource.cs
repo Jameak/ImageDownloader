@@ -9,6 +9,7 @@ using DataAccess.Helpers;
 using DataAccess.OAuth;
 using DataAccess.Responses;
 using DataAccess.Responses.Impl;
+using Newtonsoft.Json;
 
 namespace DataAccess.Sources
 {
@@ -133,7 +134,8 @@ namespace DataAccess.Sources
 
                 if (result.IsSuccessStatusCode)
                 {
-                    var reply = await result.Content.ReadAsAsync<ApiHelper<ApiHelper<ApiHelper<RedditPost>>>>();
+                    var val = await result.Content.ReadAsStringAsync();
+                    var reply = JsonConvert.DeserializeObject<ApiHelper<ApiHelper<ApiHelper<RedditPost>>>>(val);
 
                     //Ignore selfposts since they dont link to any images.
                     var linkposts = new List<RedditPost>(reply.Data.Children.Where(i => !i.Data.Is_self).Select(i => i.Data));

@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using UI.ViewModels;
 using UI.ViewModels.Base;

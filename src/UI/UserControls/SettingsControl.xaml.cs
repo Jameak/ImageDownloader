@@ -15,7 +15,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DataAccess;
-using Microsoft.Extensions.DependencyInjection;
 using UI.ViewModels;
 using UI.ViewModels.Base;
 

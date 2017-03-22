@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Responses.Impl;
+using Newtonsoft.Json;
 
 namespace DataAccess.Sources
 {
@@ -36,7 +37,8 @@ namespace DataAccess.Sources
 
             if (result.IsSuccessStatusCode)
             {
-                var image = await result.Content.ReadAsAsync<DeviantartImage>();
+                var val = await result.Content.ReadAsStringAsync();
+                var image = JsonConvert.DeserializeObject<DeviantartImage>(val);
 
                 var ext = await image.GetImageType();
                 if (Settings.GetSupportedExtensions().Contains(ext.ToLower()))

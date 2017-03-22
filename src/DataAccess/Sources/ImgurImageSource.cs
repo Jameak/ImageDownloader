@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DataAccess.Helpers;
 using DataAccess.Responses;
 using DataAccess.Responses.Impl;
+using Newtonsoft.Json;
 
 namespace DataAccess.Sources
 {
@@ -46,12 +47,13 @@ namespace DataAccess.Sources
 
                 if (result.IsSuccessStatusCode)
                 {
-                    var val = await result.Content.ReadAsAsync<ApiHelper<ImgurImage>>();
+                    var val = await result.Content.ReadAsStringAsync();
+                    var image = JsonConvert.DeserializeObject<ApiHelper<ImgurImage>>(val);
 
-                    var ext = await val.Data.GetImageType();
+                    var ext = await image.Data.GetImageType();
                     if (Settings.GetSupportedExtensions().Contains(ext.ToLower()))
                     {
-                        return val.Data;
+                        return image.Data;
                     }
                 }
             }

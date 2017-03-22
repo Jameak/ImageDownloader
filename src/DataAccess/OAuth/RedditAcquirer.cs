@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DataAccess.OAuth
 {
@@ -66,7 +67,9 @@ namespace DataAccess.OAuth
 
             if (result.IsSuccessStatusCode)
             {
-                _token = await result.Content.ReadAsAsync<RedditToken>();
+                var val = await result.Content.ReadAsStringAsync();
+                _token = JsonConvert.DeserializeObject<RedditToken>(val);
+
                 _token.AcquisitionTime = CurrentTimeSeconds();
                 return _token;
             }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Helpers;
 using DataAccess.Responses.Impl;
+using Newtonsoft.Json;
 
 namespace DataAccess.Sources
 {
@@ -34,9 +35,10 @@ namespace DataAccess.Sources
 
             if (result.IsSuccessStatusCode)
             {
-                var val = await result.Content.ReadAsAsync<ApiHelper<ImgurRatelimitResponse>>();
-                val.Data.StatusCode = result.StatusCode;
-                return val.Data;
+                var val = await result.Content.ReadAsStringAsync();
+                var ratelimit = JsonConvert.DeserializeObject<ApiHelper<ImgurRatelimitResponse>>(val);
+                ratelimit.Data.StatusCode = result.StatusCode;
+                return ratelimit.Data;
             }
 
             return new ImgurRatelimitResponse {StatusCode = result.StatusCode};
