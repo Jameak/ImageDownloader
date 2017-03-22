@@ -49,6 +49,10 @@ namespace UI
             var clientDeviantart = new HttpClient();
             clientDeviantart.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Settings.GetDeviantartUserAgent());
 
+            var clientGithub = new HttpClient();
+            clientGithub.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", Settings.GetGitHubUserAgent());
+            clientGithub.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/vnd.github.v3+json");
+
             //Sources
             services.AddTransient<ISource<ImgurRatelimitResponse>>(o => new ImgurRatelimitSource(clientImgur));
             services.AddTransient<ISource<ImgurAlbum>>(o => new ImgurAlbumSource(clientImgur, o.GetService<ImgurRatelimiter>()));
@@ -60,6 +64,7 @@ namespace UI
                new RedditSource(clientReddit, o.GetService<ISource<ImgurAlbum>>(),
                                 o.GetService<ISource<ImgurImage>>(), o.GetService<ISource<DeviantartImage>>(),
                                 o.GetService<ITokenAcquirer<RedditToken>>()));
+            services.AddTransient<ISource<GithubReleases>>(o => new GithubReleaseSource(clientGithub));
 
             //Handlers
             services.AddTransient<IHandler<ImgurHandler.ImgurFilter, IApiCollection<IApiImage>>>(o => new ImgurHandler(o.GetService<ISource<ImgurAlbum>>(), o.GetService<ISource<GenericAlbum>>()));
@@ -70,12 +75,13 @@ namespace UI
 
             services.AddSingleton<ImgurRatelimiter>(new ImgurRatelimiter(services.GetService<ISource<ImgurRatelimitResponse>>()));
             services.AddTransient<Ratelimiter>(o => new Ratelimiter(o.GetService<ImgurRatelimiter>()));
+            services.AddTransient<UpdateChecker>(o => new UpdateChecker(o.GetService<ISource<GithubReleases>>()));
 
             //Viewmodels
             services.AddTransient<ImgurControlViewModel>(o => new ImgurControlViewModel(o.GetService<IHandler<ImgurHandler.ImgurFilter, IApiCollection<IApiImage>>>()));
             services.AddTransient<RedditControlViewModel>(o => new RedditControlViewModel(o.GetService<IHandler<RedditHandler.RedditFilter, RedditListing>>()));
             services.AddTransient<LocalControlViewModel>(o => new LocalControlViewModel(o.GetService<IHandler<LocalHandler.LocalFilter, LocalDirectory>>()));
-            services.AddTransient<SettingsControlViewModel>(o => new SettingsControlViewModel(o.GetService<Ratelimiter>()));
+            services.AddTransient<SettingsControlViewModel>(o => new SettingsControlViewModel(o.GetService<Ratelimiter>(), o.GetService<UpdateChecker>()));
 
             Container = services;
         }

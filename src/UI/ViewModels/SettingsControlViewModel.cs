@@ -29,6 +29,7 @@ namespace UI.ViewModels
         private int _maxUserLimit;
         private int _remainingClientLimit;
         private int _remainingUserLimit;
+        private string _versionNumber;
 
         #region XAML binding properties
         public string ImgurSetting { get { return _imgurSetting; } set { if (_imgurSetting != value) { _imgurSetting = value; OnPropertyChanged(); } } }
@@ -53,7 +54,7 @@ namespace UI.ViewModels
 
         public int RemainingUserLimit { get { return _remainingUserLimit; } set { if (_remainingUserLimit != value) { _remainingUserLimit = value; OnPropertyChanged(); } } }
         
-        public string VersionNumber { get; private set; }
+        public string VersionNumber { get { return _versionNumber; } set { if (_versionNumber != value) { _versionNumber = value; OnPropertyChanged(); } } }
 
         public ICommand SaveSettings { get; set; }
         public ICommand RestoreDefaults { get; set; }
@@ -61,9 +62,9 @@ namespace UI.ViewModels
         public ICommand LoadSettings { get; set; }
         #endregion
 
-        public SettingsControlViewModel(Ratelimiter limitHandler)
+        public SettingsControlViewModel(Ratelimiter limitHandler, UpdateChecker updateChecker)
         {
-            VersionNumber = Settings.GetVersionNumber();
+            CheckForUpdate(updateChecker);
 
             RefreshLimits = new RelayCommand(async o =>
             {
@@ -121,6 +122,14 @@ namespace UI.ViewModels
 
                 SupportedExtensions = builder.ToString().TrimEnd(',');
             });
+        }
+
+        private async void CheckForUpdate(UpdateChecker updateChecker)
+        {
+            var result = await updateChecker.CheckForUpdate();
+            VersionNumber = result.Item1
+                ? $"Current version: {Settings.GetVersionNumber()}\nUpdate available: {result.Item2}"
+                : Settings.GetVersionNumber();
         }
     }
 }

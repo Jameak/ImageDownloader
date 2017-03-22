@@ -136,5 +136,14 @@ namespace DataAccess.Properties {
                 return ((string)(this["VersionNumber"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ImageDownloader")]
+        public string GitHubUserAgent {
+            get {
+                return ((string)(this["GitHubUserAgent"]));
+            }
+        }
     }
 }

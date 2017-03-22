@@ -65,6 +65,7 @@
     <Compile Include="Responses\Impl\DeviantartImage.cs" />
     <Compile Include="Responses\Impl\GenericAlbum.cs" />
     <Compile Include="Responses\Impl\GenericImage.cs" />
+    <Compile Include="Responses\Impl\GithubRelease.cs" />
     <Compile Include="Responses\Impl\ImgurAlbum.cs" />
     <Compile Include="Responses\Impl\ImgurImage.cs" />
     <Compile Include="Responses\Impl\ImgurRatelimitResponse.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Responses\Impl\RedditPost.cs" />
     <Compile Include="SettingsAccess.cs" />
     <Compile Include="Sources\DeviantartImageSource.cs" />
+    <Compile Include="Sources\GithubReleaseSource.cs" />
     <Compile Include="Sources\ImgurAccountImagesSource.cs" />
     <Compile Include="Sources\ImgurAlbumSource.cs" />
     <Compile Include="Sources\ImgurImageSource.cs" />

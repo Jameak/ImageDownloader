@@ -36,6 +36,8 @@ namespace DataAccess
 
         string GetDeviceId();
 
+        string GetGitHubUserAgent();
+
         void Save();
 
         void ResetDefaults();

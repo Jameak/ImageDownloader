@@ -134,6 +134,14 @@ namespace DataAccess
             }
         }
 
+        public string GetGitHubUserAgent()
+        {
+            lock (_sync)
+            {
+                return Properties.Settings.Default.GitHubUserAgent;
+            }
+        }
+
         public string GetDeviceId()
         {
             lock (_sync)

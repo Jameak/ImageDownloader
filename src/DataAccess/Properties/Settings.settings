@@ -41,5 +41,8 @@
     <Setting Name="VersionNumber" Type="System.String" Scope="Application">
       <Value Profile="(Default)">v1.1.0</Value>
     </Setting>
+    <Setting Name="GitHubUserAgent" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ImageDownloader</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

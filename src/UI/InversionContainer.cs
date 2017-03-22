@@ -11,12 +11,12 @@ namespace UI
         private readonly Dictionary<Type, Func<IServiceProvider, dynamic>> _transients = new Dictionary<Type, Func<IServiceProvider, dynamic>>();
         private readonly Dictionary<Type, dynamic> _singletons = new Dictionary<Type, dynamic>();
 
-        public void AddTransient<T>(Func<IServiceProvider, dynamic> obj)
+        public void AddTransient<T>(Func<IServiceProvider, T> obj)
         {
-            _transients.Add(typeof(T), obj);
+            _transients.Add(typeof(T), obj as Func<IServiceProvider, dynamic>);
         }
 
-        public void AddTransient<T, K>() where K : new()
+        public void AddTransient<T, K>() where K :T, new()
         {
             AddTransient<T>(o => new K());
         }

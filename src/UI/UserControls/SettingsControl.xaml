@@ -85,7 +85,7 @@
 
                 <Grid Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="7" VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding VersionNumber}"/>
-                    <TextBlock HorizontalAlignment="Right">
+                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom">
                         <Hyperlink NavigateUri="https://github.com/jameak/ImageDownloader" RequestNavigate="Hyperlink_OnRequestNavigate">
                          Github
                         </Hyperlink>
