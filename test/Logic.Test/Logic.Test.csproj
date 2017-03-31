@@ -73,6 +73,7 @@
     <Compile Include="Handlers\RedditHandlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatelimiterTest.cs" />
+    <Compile Include="UpdateCheckerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
