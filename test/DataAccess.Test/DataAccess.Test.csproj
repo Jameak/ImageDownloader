@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ImageHelperTest.cs" />
     <Compile Include="Helpers\ImgurRatelimiterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Responses\DeviantartImageTest.cs" />

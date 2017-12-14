@@ -46,11 +46,11 @@ namespace DataAccess.Helpers
         /// <summary>
         /// Non-recursive GCD
         /// </summary>
-        public static int GCD(int a, int b)
+        private static int GCD(int a, int b)
         {
             while (true)
             {
-                if (b == 0) return a;
+                if (b == 0) return Math.Abs(a);
                 var a1 = a;
                 a = b;
                 b = a1 % b;
@@ -62,6 +62,15 @@ namespace DataAccess.Helpers
         /// </summary>
         public static Tuple<int, int> GetAspectRatio(int width, int height)
         {
+            return GetAspectRatio(width, height, SettingsAccess.GetInstance());
+        }
+
+        /// <summary>
+        /// Reduces the given ratio to their lowest rational representation.
+        /// </summary>
+        public static Tuple<int, int> GetAspectRatio(int width, int height, ISettingsManager settingsInstance)
+        {
+            if (width == 0 || height == 0) return new Tuple<int, int>(settingsInstance.GetFallbackWidth(), settingsInstance.GetFallbackHeight());
             var den = GCD(width, height);
             var item1 = width / den;
             var item2 = height / den;
