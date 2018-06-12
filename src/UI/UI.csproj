@@ -65,6 +65,7 @@
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Converters\LogConverter.cs" />
     <Compile Include="Converters\NullableIntConverter.cs" />
+    <Compile Include="Converters\PercentConverter.cs" />
     <Compile Include="Converters\RadioButton_BoolToStringConverter.cs" />
     <Compile Include="InversionContainer.cs" />
     <Compile Include="ThreadsafeObservableStringCollection.cs" />

@@ -56,6 +56,14 @@
 
                 <Button Grid.Row="5" Grid.Column="0" Command="{Binding ShowLog}" Content="Show Log" Margin="2,10,2,2" Height="20" VerticalAlignment="Top"/>
                 <ProgressBar Grid.Row="5" Grid.Column="1" Height="20" VerticalAlignment="Bottom" Margin="2" Minimum="0"  Maximum="{Binding ProgressMaxValue}" Value="{Binding Log.Count, Mode=OneWay}"/>
+                <TextBlock x:Name="ProgressIndicator" Grid.Row="5" Grid.Column="1" Margin="2" Padding="2" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{x:Static converters:Converters.PercentConverter}">
+                            <Binding Path="Log.Count" Mode="OneWay"/>
+                            <Binding Path="ProgressMaxValue" Mode="OneWay"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
                 <Button Grid.Row="5" Grid.Column="2" Command="{Binding Download}" Content=" Start Filtering " Margin="2,10,2,2" Height="20" VerticalAlignment="Top" IsEnabled="{Binding IsIdle, Mode=OneWay}"/>
             </Grid>
         </Grid>

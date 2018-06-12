@@ -14,5 +14,6 @@ namespace UI.Converters
         public static readonly LogConverter LogConverter = new LogConverter();
         public static readonly NullableIntConverter NullableIntConverter = new NullableIntConverter();
         public static readonly RadioButton_BoolToStringConverter RadioButton_BoolToStringConverter = new RadioButton_BoolToStringConverter();
+        public static readonly PercentConverter PercentConverter = new PercentConverter();
     }
 }

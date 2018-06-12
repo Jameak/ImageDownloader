@@ -79,24 +79,6 @@ namespace UI.UserControls
         {
             return new RelayCommand(o =>
             {
-                if (vm.Log.Count > 10000)
-                {
-                    var messagebox = MessageBox.Show($"The log has {vm.Log.Count} entries. The log textbox may take a long time to render these, during which the program will appear to be frozen. \n\nAre you sure you want to continue?",
-                        "Warning: Large log.", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-                    switch (messagebox)
-                    {
-                        case MessageBoxResult.Yes:
-                        case MessageBoxResult.OK:
-                            break;
-                        case MessageBoxResult.None:
-                        case MessageBoxResult.Cancel:
-                        case MessageBoxResult.No:
-                        default:
-                            return;
-                    }
-                }
-
                 var logWindow = new LogWindow(vm, header)
                 {
                     Height = control.ActualHeight,

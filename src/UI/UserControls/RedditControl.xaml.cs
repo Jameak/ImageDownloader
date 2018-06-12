@@ -81,7 +81,11 @@ namespace UI.UserControls
             });
 
             //Buttons
-            _vm.Download = new RelayCommand(o => _vm.StartDownload(),                
+            _vm.Download = new RelayCommand(o =>
+            {
+                ProgressIndicator.Visibility = Visibility.Visible;
+                _vm.StartDownload();
+            },                
                 o => !string.IsNullOrWhiteSpace(_vm.Source) && !string.IsNullOrWhiteSpace(_vm.TargetFolder)); //Download button is only enabled when both a source and target have been chosen.
 
             _vm.ShowLog = SharedEventHandlingLogic.CreateLogCommand(_vm, this, "Reddit");
@@ -97,7 +101,7 @@ namespace UI.UserControls
             });
             
             _vm.PullCommand.Execute(null);
-
+            ProgressIndicator.Visibility = Visibility.Hidden;
             DataContext = _vm;
         }
 
