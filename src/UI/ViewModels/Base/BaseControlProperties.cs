@@ -50,6 +50,7 @@ namespace UI.ViewModels.Base
 
         public ICommand SelectFolder { get; set; }
         public RelayCommand Download { get; set; }
+        public RelayCommand ShowLog { get; set; }
         #endregion
 
         /// <summary>

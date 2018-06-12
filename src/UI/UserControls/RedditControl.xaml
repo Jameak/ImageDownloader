@@ -23,8 +23,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Subreddit: /r/" VerticalAlignment="Center"/>
                 <TextBox Grid.Column="1" Grid.Row="0" Margin="2" Grid.ColumnSpan="2" Text="{Binding Source, Mode=TwoWay}"/>
@@ -101,19 +99,9 @@
                     </Grid>
                 </Grid>
 
-                <ProgressBar Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Height="20" VerticalAlignment="Bottom" Margin="2" Minimum="0"  Maximum="{Binding ProgressMaxValue}" Value="{Binding Log.Count, Mode=OneWay}"/>
+                <Button Grid.Row="6" Grid.Column="0" Command="{Binding ShowLog}" Content="Show Log" Margin="2,10,2,2" Height="20" VerticalAlignment="Top"/>
+                <ProgressBar Grid.Row="6" Grid.Column="1" Height="20" VerticalAlignment="Bottom" Margin="2" Minimum="0"  Maximum="{Binding ProgressMaxValue}" Value="{Binding Log.Count, Mode=OneWay}"/>
                 <Button Grid.Row="6" Grid.Column="2" Command="{Binding Download}" Content="Download" Margin="2,10,2,2" Height="20" VerticalAlignment="Top" IsEnabled="{Binding IsIdle, Mode=OneWay}"/>
-                <Rectangle x:Name="Separator" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Stroke="#FF000000" Height="1" StrokeThickness="1" StrokeDashArray="2 4" Margin="3"/>
-
-                <TextBox x:Name="Log" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" Margin="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap">
-                    <TextBox.Text>
-                        <MultiBinding Converter="{x:Static converters:Converters.LogConverter}">
-                            <Binding Path="Log" Mode="OneWay"/>
-                            <Binding Path="Log.Count" Mode="OneWay"/>
-                            <!--Subscribing to .Count to make it update when the content changes, and not just when the collection itself changes-->
-                        </MultiBinding>
-                    </TextBox.Text>
-                </TextBox>
             </Grid>
         </Grid>
     </ScrollViewer>

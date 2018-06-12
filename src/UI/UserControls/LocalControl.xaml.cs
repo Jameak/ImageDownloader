@@ -29,13 +29,10 @@ namespace UI.UserControls
             InitializeComponent();
 
             _vm = (Application.Current as App).Container.GetService<LocalControlViewModel>();
-            _vm.Download = new RelayCommand(o =>
-            {
-                _vm.StartDownload();
-                Separator.Visibility = Visibility.Visible;
-                Log.Visibility = Visibility.Visible;
-            },  //Download button is only enabled when both a source and target have been chosen.
-                o => !string.IsNullOrWhiteSpace(_vm.Source) && !string.IsNullOrWhiteSpace(_vm.TargetFolder));
+            _vm.Download = new RelayCommand(o => _vm.StartDownload(),                
+                o => !string.IsNullOrWhiteSpace(_vm.Source) && !string.IsNullOrWhiteSpace(_vm.TargetFolder)); //Download button is only enabled when both a source and target have been chosen.
+
+            _vm.ShowLog = SharedEventHandlingLogic.CreateLogCommand(_vm, this, "Local files");
 
             _vm.SelectFolder = new RelayCommand(o =>
             {
@@ -56,9 +53,6 @@ namespace UI.UserControls
                     _vm.Source = dialog.SelectedPath;
                 }
             });
-
-            Separator.Visibility = Visibility.Collapsed;
-            Log.Visibility = Visibility.Collapsed;
 
             DataContext = _vm;
         }

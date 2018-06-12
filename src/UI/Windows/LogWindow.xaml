@@ -1,0 +1,22 @@
+﻿<Window x:Class="UI.Windows.LogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:UI.Converters"
+        mc:Ignorable="d"
+        Title="LogWindow" Height="300" Width="300">
+    <Grid Background="LightGray">
+        <Grid Margin="7">
+            <TextBox x:Name="Log" Margin="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" UndoLimit="0">
+                <TextBox.Text>
+                    <MultiBinding Converter="{x:Static converters:Converters.LogConverter}">
+                        <Binding Path="Log" Mode="OneWay"/>
+                        <Binding Path="Log.Count" Mode="OneWay"/>
+                        <!--Subscribing to .Count to make it update when the content changes, and not just when the collection itself changes-->
+                    </MultiBinding>
+                </TextBox.Text>
+            </TextBox>
+        </Grid>
+    </Grid>
+</Window>

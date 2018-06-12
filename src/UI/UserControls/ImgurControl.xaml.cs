@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Forms;
@@ -6,7 +7,9 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using UI.ViewModels;
 using UI.ViewModels.Base;
+using UI.Windows;
 using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace UI.UserControls
@@ -20,13 +23,10 @@ namespace UI.UserControls
             InitializeComponent();
 
             _vm = (Application.Current as App).Container.GetService<ImgurControlViewModel>();
-            _vm.Download = new RelayCommand(o =>
-            {
-                _vm.StartDownload();
-                Separator.Visibility = Visibility.Visible;
-                Log.Visibility = Visibility.Visible;
-            },  //Download button is only enabled when both a source and target have been chosen.
-                o => !string.IsNullOrWhiteSpace(_vm.Source) && !string.IsNullOrWhiteSpace(_vm.TargetFolder));
+            _vm.Download = new RelayCommand(o => _vm.StartDownload(),
+                o => !string.IsNullOrWhiteSpace(_vm.Source) && !string.IsNullOrWhiteSpace(_vm.TargetFolder)); //Download button is only enabled when both a source and target have been chosen.
+
+            _vm.ShowLog = SharedEventHandlingLogic.CreateLogCommand(_vm, this, "Imgur");
 
             _vm.SelectFolder = new RelayCommand(o =>
             {
@@ -37,9 +37,6 @@ namespace UI.UserControls
                     _vm.TargetFolder = dialog.SelectedPath;
                 }
             });
-
-            Separator.Visibility = Visibility.Collapsed;
-            Log.Visibility = Visibility.Collapsed;
 
             DataContext = _vm;
         }
