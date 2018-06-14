@@ -18,6 +18,14 @@ namespace Logic.Handlers
             }
         }
 
+        protected void WriteToLog(object syncObj, ICollection<string> outputLog, string message)
+        {
+            lock (syncObj)
+            {
+                outputLog.Add(message);
+            }
+        }
+
         public abstract Task<K> ParseSource(string source, bool allowNestedCollections = true, int? amount = null);
         public abstract Task FetchContent(K parsedSource, string targetFolder, T filter, ICollection<string> outputLog);
     }

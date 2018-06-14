@@ -64,15 +64,12 @@ namespace Logic
             var cleanVersion = version.StartsWith("v") ? version.Substring(1) : version;
             var labels = cleanVersion.Split('.');
 
-            int major;
-            int minor;
-            int patch;
-            int.TryParse(labels[0], out major);
-            int.TryParse(labels[1], out minor);
+            int.TryParse(labels[0], out int major);
+            int.TryParse(labels[1], out int minor);
 
             //Patch may contain extra non-int info. We dont want to notify about new pre-releases, so failing on those are fine.
             // This will also fail on build-metadata, but I wont be using that so that doesn't matter.
-            int.TryParse(labels[2], out patch);
+            int.TryParse(labels[2], out int patch);
 
             return new Tuple<int, int, int>(major, minor, patch);
         }

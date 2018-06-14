@@ -62,59 +62,48 @@ namespace Logic.Handlers
         /// </summary>
         public override async Task FetchContent(IApiCollection<IApiImage> parsedSource, string targetFolder, ImgurFilter filter, ICollection<string> outputLog)
         {
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 if (parsedSource.GetImages() != null)
                 {
                     outputLog.Add($"Starting download of {parsedSource.GetImages().Count()} images.");
 
                     var sync = new object();
+                    //Limit degree of parallelism to avoid sending too many http-requests at the same time. 
+                    //  8 seems like a reasonable amount of requests to have in-flight at a time.
+                    var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 8 };
 
-                    foreach (var image in parsedSource.GetImages().Where(image => image != null).AsParallel())
+                    Parallel.ForEach(parsedSource.GetImages().Where(image => image != null), parallelOptions, image =>
                     {
-                        var imageName = Filenamer.Clean(await image.GetImageName());
-
-                        try
+                        using (image)
                         {
-                            if (filter(await image.GetHeight(), await image.GetWidth(), await image.GetAspectRatio()))
+                            var imageName = Filenamer.Clean(image.GetImageName().Result);
+
+                            try
                             {
-                                var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
-                                var fileContents = await image.GetImage();
-
-                                File.WriteAllBytes(path, fileContents);
-
-                                lock (sync)
+                                if (filter(image.GetHeight().Result, image.GetWidth().Result, image.GetAspectRatio().Result))
                                 {
-                                    outputLog.Add($"Image saved: {imageName}");
-                                    image.Dispose();
+                                    var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
+                                    var fileContents = image.GetImage().Result;
+
+                                    File.WriteAllBytes(path, fileContents);
+                                    WriteToLog(sync, outputLog, $"Image saved: {imageName}");
+                                }
+                                else
+                                {
+                                    WriteToLog(sync, outputLog, $"Image skipped: {imageName}");
                                 }
                             }
-                            else
+                            catch (WebException)
                             {
-                                lock (sync)
-                                {
-                                    outputLog.Add($"Image skipped: {imageName}");
-                                    image.Dispose();
-                                }
+                                WriteToLog(sync, outputLog, $"Unable to download image: {imageName}");
+                            }
+                            catch (IOException)
+                            {
+                                WriteToLog(sync, outputLog, $"IO Failure - Error occured while saving image: {imageName}");
                             }
                         }
-                        catch (WebException)
-                        {
-                            lock (sync)
-                            {
-                                outputLog.Add($"Unable to download image: {imageName}");
-                                image.Dispose();
-                            }
-                        }
-                        catch (IOException)
-                        {
-                            lock (sync)
-                            {
-                                outputLog.Add($"IO Failure - Error occured while saving image: {imageName}");
-                                image.Dispose();
-                            }
-                        }
-                    }
+                    });
                 }
 
                 outputLog.Add("Download finished.");

@@ -34,50 +34,43 @@ namespace Logic.Handlers
         /// </summary>
         public override async Task FetchContent(LocalDirectory parsedSource, string targetFolder, LocalFilter filter, ICollection<string> outputLog)
         {
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 if (parsedSource.GetImages() != null)
                 {
                     outputLog.Add($"Starting filtering of {parsedSource.GetImages().Count()} images.");
 
                     var sync = new object();
+                    //Limit degree of parallelism to avoid sending too many http-requests at the same time. 
+                    //  8 seems like a reasonable amount of requests to have in-flight at a time.
+                    var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 8 };
 
-                    foreach (var image in parsedSource.GetImages().Where(image => image != null).AsParallel())
+                    Parallel.ForEach(parsedSource.GetImages().Where(image => image != null), parallelOptions, image =>
                     {
-                        var imageName = Filenamer.Clean(await image.GetImageName());
-
-                        try
+                        using (image)
                         {
-                            if (filter(await image.GetHeight(), await image.GetWidth(), await image.GetAspectRatio()))
+                            var imageName = Filenamer.Clean(image.GetImageName().Result);
+
+                            try
                             {
-                                var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
-
-                                File.WriteAllBytes(path, await image.GetImage());
-
-                                lock (sync)
+                                if (filter(image.GetHeight().Result, image.GetWidth().Result, image.GetAspectRatio().Result))
                                 {
-                                    outputLog.Add($"Image copied: {imageName}");
-                                    image.Dispose();
+                                    var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
+
+                                    File.WriteAllBytes(path, image.GetImage().Result);
+                                    WriteToLog(sync, outputLog, $"Image copied: {imageName}");
+                                }
+                                else
+                                {
+                                    WriteToLog(sync, outputLog, $"Image skipped: {imageName}");
                                 }
                             }
-                            else
+                            catch (IOException)
                             {
-                                lock (sync)
-                                {
-                                    outputLog.Add($"Image skipped: {imageName}");
-                                    image.Dispose();
-                                }
+                                WriteToLog(sync, outputLog, $"IO Failure - Error occured while saving or loading image: {imageName}");
                             }
                         }
-                        catch (IOException)
-                        {
-                            lock (sync)
-                            {
-                                outputLog.Add($"IO Failure - Error occured while saving or loading image: {imageName}");
-                                image.Dispose();
-                            }
-                        }
-                    }
+                    });
                 }
 
                 outputLog.Add("Filtering finished.");

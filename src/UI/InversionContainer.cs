@@ -30,13 +30,11 @@ namespace UI
         {
             if (_singletons.ContainsKey(serviceType))
             {
-                object val;
-                _singletons.TryGetValue(serviceType, out val);
+                _singletons.TryGetValue(serviceType, out object val);
                 return val;
             }
-
-            Func<IServiceProvider, dynamic> value;
-            if(!_transients.TryGetValue(serviceType, out value))
+            
+            if(!_transients.TryGetValue(serviceType, out Func<IServiceProvider, dynamic> value))
             {
                 throw new InvalidOperationException();
             }

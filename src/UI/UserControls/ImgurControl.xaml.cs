@@ -23,24 +23,9 @@ namespace UI.UserControls
             InitializeComponent();
 
             _vm = (Application.Current as App).Container.GetService<ImgurControlViewModel>();
-            _vm.Download = new RelayCommand(o =>
-            {
-                ProgressIndicator.Visibility = Visibility.Visible;
-                _vm.StartDownload();
-            },
-                o => !string.IsNullOrWhiteSpace(_vm.Source) && !string.IsNullOrWhiteSpace(_vm.TargetFolder)); //Download button is only enabled when both a source and target have been chosen.
-
+            _vm.Download = SharedEventHandlingLogic.CreateDownloadCommand(_vm, ProgressIndicator);
             _vm.ShowLog = SharedEventHandlingLogic.CreateLogCommand(_vm, this, "Imgur");
-
-            _vm.SelectFolder = new RelayCommand(o =>
-            {
-                var dialog = new FolderBrowserDialog();
-                var result = dialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    _vm.TargetFolder = dialog.SelectedPath;
-                }
-            });
+            _vm.SelectFolder = SharedEventHandlingLogic.CreateSelectFolderCommand(_vm);
 
             ProgressIndicator.Visibility = Visibility.Hidden;
             DataContext = _vm;

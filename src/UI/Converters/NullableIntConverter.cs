@@ -20,8 +20,7 @@ namespace UI.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int i;
-            if (int.TryParse(value?.ToString(), out i))
+            if (int.TryParse(value?.ToString(), out int i))
             {
                 return i;
             }

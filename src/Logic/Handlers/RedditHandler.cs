@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,63 +48,55 @@ namespace Logic.Handlers
         /// </summary>
         public override async Task FetchContent(RedditListing parsedSource, string targetFolder, RedditFilter filter, ICollection<string> outputLog)
         {
-            await Task.Run(async () =>
+            await Task.Run(() =>
             {
                 if (parsedSource.GetCollections() != null)
                 {
                     outputLog.Add($"Starting download of {parsedSource.GetImages().Count()} images.");
+                    
 
-                    foreach (var redditPost in parsedSource.GetCollections().Where(image => image != null).AsParallel())
+                    foreach (var redditPost in parsedSource.GetCollections().Where(image => image != null))
                     {
                         if (redditPost.GetImages() == null) continue;
 
                         var sync = new object();
+                        //Limit degree of parallelism to avoid sending too many http-requests at the same time. 
+                        //  8 seems like a reasonable amount of requests to have in-flight at a time.
+                        var parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 8};
 
-                        foreach (var image in redditPost.GetImages().Where(image => image != null).AsParallel())
+                        Parallel.ForEach(redditPost.GetImages().Where(image => image != null), parallelOptions, image =>
                         {
-                            var imageName = Filenamer.Clean($"{redditPost.ShortTitle} - {await image.GetImageName()}");
-
-                            try
+                            using (image)
                             {
-                                if (filter(await image.GetHeight(), await image.GetWidth(), redditPost.Over_18, redditPost.Album != null, await image.GetAspectRatio()))
+                                var imageName = Filenamer.Clean($"{redditPost.ShortTitle} - {image.GetImageName().Result}");
+
+                                try
                                 {
-                                    var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
-                                    var fileContents = await image.GetImage();
-
-                                    File.WriteAllBytes(path, fileContents);
-
-                                    lock (sync)
+                                    if (filter(image.GetHeight().Result, image.GetWidth().Result, redditPost.Over_18,
+                                        redditPost.Album != null, image.GetAspectRatio().Result))
                                     {
-                                        outputLog.Add($"Image saved: {imageName}");
-                                        image.Dispose();
+                                        var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder,
+                                            imageName));
+                                        var fileContents = image.GetImage().Result;
+
+                                        File.WriteAllBytes(path, fileContents);
+                                        WriteToLog(sync, outputLog, $"Image saved: {imageName}");
+                                    }
+                                    else
+                                    {
+                                        WriteToLog(sync, outputLog, $"Image skipped: {imageName}");
                                     }
                                 }
-                                else
+                                catch (WebException)
                                 {
-                                    lock (sync)
-                                    {
-                                        outputLog.Add($"Image skipped: {imageName}");
-                                        image.Dispose();
-                                    }
+                                    WriteToLog(sync, outputLog, $"Unable to download image: {imageName}");
+                                }
+                                catch (IOException)
+                                {
+                                    WriteToLog(sync, outputLog, $"IO Failure - Error occured while saving image: {imageName}");
                                 }
                             }
-                            catch (WebException)
-                            {
-                                lock (sync)
-                                {
-                                    outputLog.Add($"Unable to download image: {imageName}");
-                                    image.Dispose();
-                                }
-                            }
-                            catch (IOException)
-                            {
-                                lock (sync)
-                                {
-                                    outputLog.Add($"IO Failure - Error occured while saving image: {imageName}");
-                                    image.Dispose();
-                                }
-                            }
-                        }
+                        });
                     }
                 }
 

@@ -6,9 +6,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using UI.ViewModels.Base;
 using UI.Windows;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace UI.UserControls
 {
@@ -86,6 +88,30 @@ namespace UI.UserControls
                 };
                 logWindow.Show();
             });
+        }
+
+        public static RelayCommand CreateSelectFolderCommand(BaseControlProperties vm)
+        {
+            return new RelayCommand(o =>
+            {
+                var dialog = new FolderBrowserDialog();
+                var result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    vm.TargetFolder = dialog.SelectedPath;
+                }
+            });
+        }
+
+        public static RelayCommand CreateDownloadCommand(BaseControlProperties vm, TextBlock progressIndicator)
+        {
+            return new RelayCommand(o =>
+                {
+                    progressIndicator.Visibility = Visibility.Visible;
+                    vm.StartDownload();
+                },
+                //Download button is only enabled when both a source and target have been chosen.
+                o => !string.IsNullOrWhiteSpace(vm.Source) && !string.IsNullOrWhiteSpace(vm.TargetFolder));
         }
     }
 }

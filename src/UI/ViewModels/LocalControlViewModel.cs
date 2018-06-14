@@ -27,7 +27,7 @@ namespace UI.ViewModels
             _downloader = downloader;
         }
 
-        public async void StartDownload()
+        public override async void StartDownload()
         {
             if (!TryParseAspectRatio())
             {

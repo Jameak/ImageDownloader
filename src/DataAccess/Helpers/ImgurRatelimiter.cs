@@ -147,32 +147,6 @@ namespace DataAccess.Helpers
                         }
                     }
                 }
-
-                //IEnumerable<string> clientRemaining;
-                //headers.TryGetValues("X-RateLimit-ClientRemaining", out clientRemaining);
-                //if (clientRemaining != null)
-                //{
-                //    var value = int.Parse(clientRemaining.First());
-
-                //    //If we have a lot of requests left, being accurate isn't important, so this is an easy way to catch the client-wide limit being reset.
-                //    if (value < _remainingClientRequests || value >= _clientLimit - 200)
-                //    {
-                //        _remainingClientRequests = value;
-                //    }
-                //}
-
-                //IEnumerable<string> userRemaining;
-                //headers.TryGetValues("X-RateLimit-UserLimit", out userRemaining);
-                //if (clientRemaining != null)
-                //{
-                //    var value = int.Parse(userRemaining.First());
-
-                //    //If we have a lot of requests left, being accurate isn't important, so this is an easy way to catch the user-limit being reset.
-                //    if (value < _remainingUserRequests || value >= _userLimit - 50)
-                //    {
-                //        _remainingUserRequests = value;
-                //    }
-                //}
             }
         }
 

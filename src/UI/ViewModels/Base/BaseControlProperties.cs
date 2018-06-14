@@ -53,6 +53,8 @@ namespace UI.ViewModels.Base
         public RelayCommand ShowLog { get; set; }
         #endregion
 
+        public abstract void StartDownload();
+
         /// <summary>
         /// Provides a mechanism for deciding whether the given height
         /// and width satisfies the specified restrictions.

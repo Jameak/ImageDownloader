@@ -21,7 +21,7 @@ namespace DataAccess.Sources
         private const int MAX_POSTS_PER_REQUEST = 100; //API doesn't support more than 100 posts per request.
 
         //API rules state no more than 60 requests per minute for oauth clients. 
-        //Requesting 1000 posts uses 10 requests in potentially less than 1 second
+        //Requesting 1000 posts uses 10 requests in potentially less than 1 second, and since we cap at 1000 posts, we wont hit the 60-request cap.
         //(but will generally be much longer since each Reddit-request is interspersed with up to 100 requests to other APIs)
         private const int HARDCAP_CONTENT_AMOUNT = 1000;
         
@@ -140,7 +140,10 @@ namespace DataAccess.Sources
                     //Ignore selfposts since they dont link to any images.
                     var linkposts = new List<RedditPost>(reply.Data.Children.Where(i => !i.Data.Is_self).Select(i => i.Data));
 
-                    foreach (var post in linkposts.AsParallel())
+                    //TODO: Should probably be parallelized, but need to figure out how to handle exceptions from requests
+                    //  performed by ParseResult since a parallel solution may wrap them in aggregate exceptions.
+                    //  Currently we just hope nothing throws which is bad, but that should be fixed before we parallelize it.
+                    foreach (var post in linkposts)
                     {
                         await ParseResult(post, usefulposts);
                     }

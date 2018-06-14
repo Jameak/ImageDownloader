@@ -41,9 +41,7 @@ namespace DataAccess.OAuth
             _client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Basic {basicBase64}");
         }
 
-        /// <summary>
-        /// See <see cref="ITokenAcquirer{T}.AcquireToken"/>
-        /// </summary>
+        /// <inheritdoc />
         public async Task<RedditToken> AcquireToken()
         {
             if (_token != null)
