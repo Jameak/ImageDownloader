@@ -25,4 +25,4 @@ The following UI example will download images from the top 25 posts of all time 
 ![Example of the Reddit tab UI](screenshots/Reddit.png)
 
 ## License
-Copyright (c) 2017 Marcus Winding Quistgaard. Released under the [MIT license](LICENSE).
+Released under the [MIT license](LICENSE).

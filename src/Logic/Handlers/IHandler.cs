@@ -33,7 +33,7 @@ namespace Logic.Handlers
         /// <returns>A container with metadata about the content located
         /// at the source.</returns>
         Task<K> ParseSource(string source, bool allowNestedCollections = true, int? amount = null);
-         
+
         /// <summary>
         /// Provides a mechanism for downloading content to the specified
         /// folder based on the parsed source, if the content satisfies
@@ -47,6 +47,9 @@ namespace Logic.Handlers
         /// each image must satisfy to be included in the download.</param>
         /// <param name="outputLog">During download of the content, information
         /// about the download-progress will be added to this collection</param>
-        Task FetchContent(K parsedSource, string targetFolder, T filter, ICollection<string> outputLog);
+        /// <param name="saveNestedCollectionsInNestedFolders">Optional parameter 
+        /// specifying whether to save nested collections in their own folder 
+        /// inside of the target folder.</param>
+        Task FetchContent(K parsedSource, string targetFolder, T filter, ICollection<string> outputLog, bool saveNestedCollectionsInNestedFolders = false);
     }
 }

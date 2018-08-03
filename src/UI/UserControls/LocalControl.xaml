@@ -52,6 +52,7 @@
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Max height:" VerticalAlignment="Center" Margin="10,2,2,2"/>
                     <TextBox Grid.Row="1" Grid.Column="2" Margin="2" Text="{Binding HeightMax, Mode=TwoWay, Converter={x:Static converters:Converters.NullableIntConverter}, TargetNullValue=''}" PreviewTextInput="InputValidation" DataObject.Pasting="InputValidationOnPaste"/>
                     <TextBox Grid.Row="2" Grid.Column="0" Margin="2" Text="{Binding AspectRatio, Mode=TwoWay}" PreviewTextInput="AspectRatioInputValidation" DataObject.Pasting="AspectRatioInputValidationOnPaste"/>
+                    <CheckBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,2,2,2" Content="Preserve folder hierarchy" IsChecked="{Binding PreserveFolderHierarchy, Mode=TwoWay}" VerticalAlignment="Center"/>
                 </Grid>
 
                 <Button Grid.Row="5" Grid.Column="0" Command="{Binding ShowLog}" Content="Show Log" Margin="2,10,2,2" Height="20" VerticalAlignment="Top"/>

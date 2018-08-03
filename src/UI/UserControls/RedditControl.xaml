@@ -86,7 +86,8 @@
                     <RadioButton x:Name="RadioTopHour" Grid.Row="6" Grid.Column="1" GroupName="TopSource" Content="Past hour" IsChecked="{Binding TopParam, Mode=TwoWay, Converter={x:Static converters:Converters.RadioButton_BoolToStringConverter}, ConverterParameter='hour'}"/>
 
                     <CheckBox Grid.Row="7" Grid.Column="0" Content="Include NSFW posts" Margin="0,8,0,0" VerticalAlignment="Bottom" IsChecked="{Binding IncludeNSFW, Mode=TwoWay}"/>
-                    <CheckBox Grid.Row="8" Grid.Column="0" Content="Skip albums" IsChecked="{Binding SkipAlbums, Mode=TwoWay}"/>
+                    <CheckBox Grid.Row="8" Grid.Column="0" Content="Skip albums" IsChecked="{Binding SkipAlbums, Mode=TwoWay}" Command="{Binding SkipAlbumsCommand}"/>
+                    <CheckBox Grid.Row="8" Grid.Column="1" Content="Save albums in nested folders" x:Name="SaveAlbumsInFoldersCheckbox" IsChecked="{Binding SaveAlbumInNestedFolder, Mode=TwoWay}"/>
                     <CheckBox Grid.Row="9" Grid.Column="0" Content="Custom query (advanced)" IsChecked="{Binding CustomQuery, Mode=TwoWay}" Command="{Binding CustomQueryCommand}" ToolTip="Turns off radiobutton modifiers and uses the url given in the subreddit-field. Useful for adding query-strings not supported through the UI." ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="99999"/>
 
                     <Grid Grid.Row="7" Grid.Column="1" Margin="0,8,0,0"  VerticalAlignment="Bottom">

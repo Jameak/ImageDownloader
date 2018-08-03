@@ -37,16 +37,16 @@ namespace Logic.Handlers
             else content = await _source.GetContent(source, amount.Value);
 
             //Remove nested collections if we dont want to include them.
-            content.Posts = content.GetCollections().Where(i => !i.HasNestedCollection || (i.HasNestedCollection && allowNestedCollections)).ToList();
             //TODO: This filtering should ideally be supported directly by the ISource, since we could then completely avoid populating the contents of the nested collections. (and in that case perform less API calls)
-
+            if (!allowNestedCollections) content.Posts = content.GetCollections().Where(i => !i.IsAlbum).ToList();
+            
             return content;
         }
 
         /// <summary>
         /// <see cref="IHandler{T,K}.FetchContent(x,string,x,ICollection{string})"/>
         /// </summary>
-        public override async Task FetchContent(RedditListing parsedSource, string targetFolder, RedditFilter filter, ICollection<string> outputLog)
+        public override async Task FetchContent(RedditListing parsedSource, string targetFolder, RedditFilter filter, ICollection<string> outputLog, bool saveNestedCollectionsInNestedFolders = false)
         {
             await Task.Run(() =>
             {
@@ -58,8 +58,22 @@ namespace Logic.Handlers
                     foreach (var redditPost in parsedSource.GetCollections().Where(image => image != null))
                     {
                         if (redditPost.GetImages() == null) continue;
-
                         var sync = new object();
+                        var localTargetFolder = targetFolder;
+
+                        //If the images will be saved in their own album, then there is no reason to prefix them with the reddit-title, since the folder has that info already.
+                        string imageNamePrefix;
+
+                        if (redditPost.IsAlbum && saveNestedCollectionsInNestedFolders)
+                        {
+                            localTargetFolder = Path.Combine(localTargetFolder, Filenamer.Clean(redditPost.ShortTitle));
+                            imageNamePrefix = string.Empty;
+                        }
+                        else
+                        {
+                            imageNamePrefix = Filenamer.Clean(redditPost.ShortTitle) + " - ";
+                        }
+
                         //Limit degree of parallelism to avoid sending too many http-requests at the same time. 
                         //  8 seems like a reasonable amount of requests to have in-flight at a time.
                         var parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 8};
@@ -68,15 +82,17 @@ namespace Logic.Handlers
                         {
                             using (image)
                             {
-                                var imageName = Filenamer.Clean($"{redditPost.ShortTitle} - {image.GetImageName().Result}");
+                                var imageName = imageNamePrefix + Filenamer.Clean(image.GetImageName().Result);
 
                                 try
                                 {
                                     if (filter(image.GetHeight().Result, image.GetWidth().Result, redditPost.Over_18,
                                         redditPost.Album != null, image.GetAspectRatio().Result))
                                     {
-                                        var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder,
-                                            imageName));
+                                        //Dont create the folder unless we actually have something to save in it.
+                                        if (!Directory.Exists(localTargetFolder)) Directory.CreateDirectory(localTargetFolder);
+
+                                        var path = Filenamer.DetermineUniqueFilename(Path.Combine(localTargetFolder, imageName));
                                         var fileContents = image.GetImage().Result;
 
                                         File.WriteAllBytes(path, fileContents);

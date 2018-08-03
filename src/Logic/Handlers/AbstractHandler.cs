@@ -27,6 +27,6 @@ namespace Logic.Handlers
         }
 
         public abstract Task<K> ParseSource(string source, bool allowNestedCollections = true, int? amount = null);
-        public abstract Task FetchContent(K parsedSource, string targetFolder, T filter, ICollection<string> outputLog);
+        public abstract Task FetchContent(K parsedSource, string targetFolder, T filter, ICollection<string> outputLog, bool saveNestedCollectionsInNestedFolders = false);
     }
 }

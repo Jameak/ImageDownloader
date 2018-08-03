@@ -19,18 +19,16 @@ namespace DataAccess.Responses.Impl
             get
             {
                 if (Title == null) return null;
-                return Title.Length <= 50 ? Title : Title.Substring(0, 50);
+                return Title.Length <= 40 ? Title : Title.Substring(0, 40);
             }
         }
 
-        public bool HasNestedCollection => Album != null;
+        public bool IsAlbum => Image == null && Album != null;
 
         public IApiImage Image { get; set; }
         public IApiCollection<IApiImage> Album { get; set; }
 
-        /// <summary>
-        /// See <see cref="IApiCollection{T}.GetImages()"/>
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<IApiImage> GetImages()
         {
             if (Image != null)
@@ -40,5 +38,6 @@ namespace DataAccess.Responses.Impl
 
             return Album?.GetImages() != null ? Album.GetImages() : new List<IApiImage>();
         }
+
     }
 }

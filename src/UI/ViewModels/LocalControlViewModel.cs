@@ -19,7 +19,9 @@ namespace UI.ViewModels
     public class LocalControlViewModel : BaseControlProperties
     {
         private readonly IHandler<LocalHandler.LocalFilter, LocalDirectory> _downloader;
+        private bool _preserveFolderHierarchy;
 
+        public bool PreserveFolderHierarchy { get => _preserveFolderHierarchy; set { if (_preserveFolderHierarchy != value) { _preserveFolderHierarchy = value; OnPropertyChanged(); } } }
         public ICommand SelectSourceFolder { get; set; }
 
         public LocalControlViewModel(IHandler<LocalHandler.LocalFilter, LocalDirectory> downloader)
@@ -50,7 +52,7 @@ namespace UI.ViewModels
             else
             {
                 ProgressMaxValue = content.GetImages().Count();
-                await _downloader.FetchContent(content, TargetFolder, ResolutionFilter, Log);
+                await _downloader.FetchContent(content, TargetFolder, ResolutionFilter, Log, PreserveFolderHierarchy);
             }
 
             IsIdle = true;

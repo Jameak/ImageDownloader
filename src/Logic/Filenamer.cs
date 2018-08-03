@@ -14,10 +14,14 @@ namespace Logic
 
         /// <summary>
         /// Strips all characters in the given string that are disallowed in filenames.
+        /// 
+        /// If stripping all invalid characters would create an invalid filename, 
+        /// then the string "Invalid name" is returned. 
         /// </summary>
         public static string Clean(string filename)
         {
-            return Regex.Replace(filename, "");
+            var cleanName = Regex.Replace(filename, "");
+            return string.IsNullOrWhiteSpace(cleanName) ? "Invalid name" : cleanName;
         }
 
         /// <summary>

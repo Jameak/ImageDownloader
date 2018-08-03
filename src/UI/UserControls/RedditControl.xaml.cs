@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,8 @@ namespace UI.UserControls
                     _vm.PullCommand.Execute(null);
                 }
             });
+            //Disable the "save albums in nested folders" checkbox if we're skipping albums.
+            _vm.SkipAlbumsCommand = new RelayCommand(o => { SaveAlbumsInFoldersCheckbox.IsEnabled = !_vm.SkipAlbums; });
 
             //Buttons
             _vm.Download = SharedEventHandlingLogic.CreateDownloadCommand(_vm, ProgressIndicator);

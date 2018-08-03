@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace Logic.Handlers
         /// <summary>
         /// <see cref="IHandler{T,K}.FetchContent(x,string,x,ICollection{string})"/>
         /// </summary>
-        public override async Task FetchContent(LocalDirectory parsedSource, string targetFolder, LocalFilter filter, ICollection<string> outputLog)
+        public override async Task FetchContent(LocalDirectory parsedSource, string targetFolder, LocalFilter filter, ICollection<string> outputLog, bool saveNestedCollectionsInNestedFolders = false)
         {
             await Task.Run(() =>
             {
@@ -47,6 +48,30 @@ namespace Logic.Handlers
 
                     Parallel.ForEach(parsedSource.GetImages().Where(image => image != null), parallelOptions, image =>
                     {
+                        var localTargetFolder = targetFolder;
+                        if (saveNestedCollectionsInNestedFolders)
+                        {
+                            var path = Path.GetDirectoryName(image.ImagePath);
+                            if (!string.IsNullOrWhiteSpace(path))
+                            {
+                                Debug.Assert(parsedSource.Directory.Length <= path.Length, $"Directory length longer than path.\nDirectory: {parsedSource.Directory}\nPath: {path}");
+                                Debug.Assert(path.Substring(0, parsedSource.Directory.Length) == parsedSource.Directory, $"Directory doesn't exist in image path.\nDirectory: {parsedSource.Directory}\nPath: {path}");
+                                
+                                var sourceDir = new DirectoryInfo(parsedSource.Directory);
+                                var innerFolders = new List<string>();
+                                var innerFolder = new DirectoryInfo(path);
+                                while (sourceDir.FullName != innerFolder?.FullName)
+                                {
+                                    innerFolders.Add(innerFolder.Name);
+                                    innerFolder = innerFolder.Parent;
+                                }
+                                
+                                innerFolders.Add(targetFolder);
+                                innerFolders.Reverse();
+                                localTargetFolder = Path.Combine(innerFolders.ToArray());
+                            }
+                        }
+
                         using (image)
                         {
                             var imageName = Filenamer.Clean(image.GetImageName().Result);
@@ -55,8 +80,10 @@ namespace Logic.Handlers
                             {
                                 if (filter(image.GetHeight().Result, image.GetWidth().Result, image.GetAspectRatio().Result))
                                 {
-                                    var path = Filenamer.DetermineUniqueFilename(Path.Combine(targetFolder, imageName));
+                                    //Dont create the folder unless we actually have something to save in it.
+                                    if (!Directory.Exists(localTargetFolder)) Directory.CreateDirectory(localTargetFolder);
 
+                                    var path = Filenamer.DetermineUniqueFilename(Path.Combine(localTargetFolder, imageName));
                                     File.WriteAllBytes(path, image.GetImage().Result);
                                     WriteToLog(sync, outputLog, $"Image copied: {imageName}");
                                 }

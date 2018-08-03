@@ -60,7 +60,9 @@ namespace Logic.Handlers
         /// <summary>
         /// <see cref="IHandler{T,K}.FetchContent(x,string,x,ICollection{string})"/>
         /// </summary>
-        public override async Task FetchContent(IApiCollection<IApiImage> parsedSource, string targetFolder, ImgurFilter filter, ICollection<string> outputLog)
+        /// <param name="saveNestedCollectionsInNestedFolders">Imgur collections
+        /// cannot contain nested albums, so the parameter has no effect.</param>
+        public override async Task FetchContent(IApiCollection<IApiImage> parsedSource, string targetFolder, ImgurFilter filter, ICollection<string> outputLog, bool saveNestedCollectionsInNestedFolders = false)
         {
             await Task.Run(() =>
             {

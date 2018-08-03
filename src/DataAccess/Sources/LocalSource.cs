@@ -25,13 +25,14 @@ namespace DataAccess.Sources
         {
             if (!Directory.Exists(directory))
             {
-                return new LocalDirectory();
+                return new LocalDirectory {Directory = directory};
             }
 
             var files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories);
 
             return new LocalDirectory
             {
+                Directory = directory,
                 Images =
                     files.Where(i => Settings.GetSupportedExtensions().Contains(Path.GetExtension(i.ToLower())))
                         .Select(i => new LocalImage {ImagePath = i})

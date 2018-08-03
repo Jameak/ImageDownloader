@@ -7,17 +7,13 @@ namespace DataAccess.Responses.Impl
     {
         public ICollection<RedditPost> Posts { private get; set; } = new List<RedditPost>();
 
-        /// <summary>
-        /// See <see cref="IApiCollection{T,K}.GetCollections()"/>
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<RedditPost> GetCollections()
         {
             return Posts;
         }
 
-        /// <summary>
-        /// See <see cref="IApiCollection{T}.GetImages()"/>
-        /// </summary>
+        /// <inheritdoc />
         public IEnumerable<IApiImage> GetImages()
         {
             var list = new List<IApiImage>();
