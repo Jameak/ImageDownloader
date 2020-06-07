@@ -39,7 +39,7 @@ namespace DataAccess.Helpers
             }
             catch (TaskCanceledException e)
             {
-                throw new WebException("Connection lost", e);
+                throw new WebException("Connection lost.", e);
             }
         }
 

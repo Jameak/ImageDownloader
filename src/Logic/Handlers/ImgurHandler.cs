@@ -104,6 +104,17 @@ namespace Logic.Handlers
                             {
                                 WriteToLog(sync, outputLog, $"IO Failure - Error occured while saving image: {imageName}");
                             }
+                            catch (AggregateException ex)
+                            {
+                                if (ex.InnerException is WebException)
+                                {
+                                    WriteToLog(sync, outputLog, $"Unable to download image: {imageName}");
+                                }
+                                else
+                                {
+                                    WriteToLog(sync, outputLog, $"Unknown error occured for {imageName}. Error message is: " + ex.InnerException.Message);
+                                }
+                            }
                         }
                     });
                 }

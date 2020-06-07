@@ -12,7 +12,7 @@ namespace DataAccess.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -82,7 +82,7 @@ namespace DataAccess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.2.0 (by /u/Jameak)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.2.1 (by /u/Jameak)")]
         public string RedditUserAgent {
             get {
                 return ((string)(this["RedditUserAgent"]));
@@ -91,7 +91,7 @@ namespace DataAccess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.2.0 (github.com/jameak/ImageDownloader)")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PC:ImageDownloader:v1.2.1 (github.com/jameak/ImageDownloader)")]
         public string DeviantartUserAgent {
             get {
                 return ((string)(this["DeviantartUserAgent"]));
@@ -130,7 +130,7 @@ namespace DataAccess.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("v1.2.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("v1.2.1")]
         public string VersionNumber {
             get {
                 return ((string)(this["VersionNumber"]));

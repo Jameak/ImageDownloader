@@ -91,8 +91,28 @@ namespace UI.ViewModels
             else
             {
                 ProgressMaxValue = content.GetImages().Count();
-                await
-                    _downloader.FetchContent(content, TargetFolder, Filter, Log, SaveAlbumInNestedFolder);
+                try
+                {
+                    await
+                        _downloader.FetchContent(content, TargetFolder, Filter, Log, SaveAlbumInNestedFolder);
+                }
+                catch (Exception e)
+                {
+                    Log.Add("Unhandled error occurred during downloading. Aborting.");
+                    var message = "Unhandled error occurred during download.\n" +
+                                  "Downloading has been aborted.\n\n" +
+                                  "To get the the error-message and stacktrace\n" +
+                                  "copied to your clipboard, click 'OK'.\n" +
+                                  "If you want to report this error, please provide\n" +
+                                  "the error message in an issue on\n" +
+                                  "Github.com/Jameak/ImageDownloader";
+                    var result = MessageBox.Show(message, "ImageDownloader", MessageBoxButton.OKCancel);
+                    if (result == MessageBoxResult.OK)
+                    {
+                        Clipboard.SetText(e.ToString());
+                        MessageBox.Show("Exception text copied to clipboard", "ImageDownloader", MessageBoxButton.OK);
+                    }
+                }
             }
 
             IsIdle = true;
